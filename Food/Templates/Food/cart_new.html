@@ -1,0 +1,568 @@
+{% extends 'Food/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    {% block cartheads %}
+    <meta charset="utf-8">
+    <title>EShopper - Bootstrap Shop Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <!-- Favicon -->
+    <link href="{% static 'Food/images/favicon.png'%}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet"> 
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{% static 'Food/cart/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{% static 'Food/cart/css/style.css'%}" rel="stylesheet">
+    {% endblock %}
+</head>
+
+{% block body %}
+<body class="sub_page">
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="{% static 'Food/images/hero-bg.jpg' %}" alt="">
+    </div>
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{% url 'Food:index'%}">
+            <span>
+              Tasty Bites
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  mx-auto ">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:index' %}">Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:menu' %}">Menu <span class="sr-only">(current)</span> </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:about' %}">About</a>
+              </li>
+            </ul>
+            <div class="user_option">
+              <!-- user login and logout icons -->
+              {% if user.is_authenticated %}
+              <a href="{% url 'logout' %}" class="user_link">
+                <i class="fa  fa-sign-out" aria-hidden="true"></i>
+                <h6>Logout</h6>
+              </a>
+              <a href="{% url 'profile' %}" class="user_link">
+                <i class="fa  fa-user" aria-hidden="true"></i>
+                <h6>Profile</h6>
+              </a>
+              {% else %}
+              <a href="{% url 'login' %}" class="user_link">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <h6>Login</h6>
+              </a>
+              <a href="{% url 'register' %}" class="user_link">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <h6>Register</h6>
+              </a>
+              {% endif %}
+              
+              <a class="cart_link" href="{% url 'Food:tempcart' %}">
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
+                  <g>
+                    <g>
+                      <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
+                   c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
+                    </g>
+                  </g>
+                  <g>
+                    <g>
+                      <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                   C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
+                   c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
+                   C457.728,97.71,450.56,86.958,439.296,84.91z" />
+                    </g>
+                  </g>
+                  <g>
+                    <g>
+                      <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
+                   c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
+                    </g>
+                  </g>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+<!-- Cart Start -->
+{% if data %}
+<div class="container-fluid pt-5">
+  <div class="row px-xl-5">
+      <div class="col-lg-8 table-responsive mb-5">
+        <table class="table table-bordered text-center mb-0">
+          <thead class="text-dark">
+            <tr>
+              <th>Image</th>
+              <th>Products</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Saved</th>
+              <th>Total</th>
+              <th>Remove</th>
+            </tr>
+          </thead>
+          <tbody class="align-middle">
+            {% for x in data %}
+            <tr>
+              <input type="hidden" class="product-id" value="{{ x.food_id }}">
+              <td class="align-middle"><img src="{{x.food_image.url}}" alt="" style="width: 50px;"></td>
+              <td class="align-middle">{{x.food_name}}</td>
+              <td class="align-middle"><div class="price">₹{{x.food_discount_price}}.00</div>({{x.food_discount}}% off)<br><s>₹{{x.food_price}}.00</s></td>
+              <td class="align-middle">
+                <div class="input-group quantity mx-auto" style="width: 100px;">
+                  <div class="input-group-btn">
+                    <button class="btn btn-sm btn-primary btn-minus qtybtn">
+                      <i class="fa fa-minus"></i>
+                    </button>
+                  </div>
+                  <input type="text" id="txtQty" class="form-control form-control-sm text-center txt-qty" value="{{x.food_quantity}}">
+                  <div class="input-group-btn">
+                    <button class="btn btn-sm btn-primary btn-plus qtybtn">
+                      <i class="fa fa-plus"></i>
+                    </button>
+                  </div>
+                </div>
+              </td>
+              <td class="align-middle">₹{{x.food_price_saved}} </td>
+              <td class="align-middle total">₹{{x.total}}.00</td> <!-- Initialize total to 0.00 -->
+              <td class="align-middle">
+                <form action="{% url 'Food:removecart' x.id %}" method="POST">
+                  {% csrf_token %}
+                  <button type="submit" class="btn btn-sm btn-danger">
+                    <i class="fa fa-times"></i>
+                  </button>
+                </form>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="col-lg-4">
+          <div class="card border-secondary mb-5">
+            <div class="card-header text-center border-0">
+              <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-between mb-3 pt-1">
+                <h6 class="font-weight-medium">Subtotal</h6>
+                <h6 class="font-weight-medium subtotal">0</h6>
+              </div>
+              <div class="d-flex justify-content-between">
+                <h6 class="font-weight-medium">Shipping</h6>
+                <h6 class="font-weight-medium" id="shipping">₹20</h6>
+              </div>
+            </div>
+            <div class="card-footer border-secondary bg-transparent">
+              <div class="d-flex justify-content-between mt-2">
+                <h5 class="font-weight-bold">Total</h5>
+                <h5 class="font-weight-bold" id="finaltotal"></h5>
+              </div>
+              <a href="{% url 'Food:endpage' %}">
+                <button class="btn btn-block btn-primary my-3 py-3" id="checkout-btn">Proceed To Checkout</button>
+              </a>
+              <a href="{% url 'Food:clearcart' user.id %}">
+                <button class="btn btn-block btn-danger my-3 py-3" id="checkout-btn">Clear Cart</button>
+              </a>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% else %}
+<div class="container-fluid pt-5">
+  <div class="row px-xl-5">
+      <div class="col-lg-8 table-responsive mb-5" style="text-align: center; font-size: 32px;">
+        <p>Cart is Empty</p>
+        <img src="{% static 'Food/images/empty-cart.png' %}" alt="Empty Cart" width="200px" height="200px">
+      </div>
+      <div class="col-lg-4">
+          <div class="card border-secondary mb-5">
+            <div class="card-header text-center border-0">
+              <h4 class="font-weight-semi-bold m-0">Cart Summary</h4>
+            </div>
+            <div class="card-footer border-secondary bg-transparent">
+              <div class="d-flex justify-content-between mt-2">
+                <h5 class="font-weight-bold" id="finaltotal"></h5>
+              </div>
+              <a href="{% url 'Food:menu' %}">
+                <button class="btn btn-block btn-danger my-3 py-3" id="checkout-btn">Add some food in the cart.</button>
+              </a>
+            </div>
+          </div>
+      </div>
+  </div>
+</div>
+{% endif %}
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 footer-col">
+          <div class="footer_contact">
+            <h4>
+              Contact Us
+            </h4>
+            <div class="contact_link_box">
+              <a href="https://www.google.com/maps/place/Sadakathullah+Appa+College/@8.7224221,77.7583326,17z/data=!3m1!4b1!4m6!3m5!1s0x3b040de163e52551:0x1c5c59926b1cf203!8m2!3d8.7224221!4d77.7609075!16s%2Fg%2F11gbldn77v?entry=ttu">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <span>
+                  Location
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span>
+                  Call +91 1234567890
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>
+                  tastybites@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <div class="footer_detail">
+            <a href="" class="footer-logo">
+              Tasty Bites
+            </a>
+            <p>
+              Our restaurant app offers a delightful dining experience with a diverse menu of traditional and innovative dishes. Easily explore our offerings, place orders, and enjoy a seamless dining experience.
+            </p>
+            <div class="footer_social">
+              <a href="">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-pinterest" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <h4>
+            Opening Hours
+          </h4>
+          <p>
+            Everyday
+          </p>
+          <p>
+            10.00 Am -10.00 Pm
+          </p>
+        </div>
+      </div>
+      <div class="footer-info">
+        <p>
+          © Tasty Bites 2024. All rights reserved.<br> Designed with love by Tasty Bites.
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script src="{% static 'Food/js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+  </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'Food/js/bootstrap.js' %}"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'Food/js/custom.js' %}"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+  </script>
+  <!-- End Google Map -->
+
+<!-- for cart -->
+      <!-- Back to Top 
+      <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+      -->
+
+      <!-- JavaScript Libraries -->
+      <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+      <script src="{% static 'Food/cart/lib/easing/easing.min.js' %}"></script>
+      <script src="{% static 'Food/cart/lib/owlcarousel/owl.carousel.min.js'%}"></script>
+  
+      <!-- Contact Javascript File -->
+      <script src="{% static 'Food/cart/mail/jqBootstrapValidation.min.js'%}"></script>
+      <script src="{% static 'Food/cart/mail/contact.js'%}"></script>
+  
+      <!-- Template Javascript -->
+      <!-- <script src="{% static 'Food/cart/js/main.js'%}"></script> -->
+
+
+
+
+
+
+  <!-- custom script total -->  
+
+  <!-- For plus and minus buttons 
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const btnPlusList = document.querySelectorAll(".btn-plus");
+        const btnMinusList = document.querySelectorAll(".btn-minus");
+        const txtQtyList = document.querySelectorAll(".txt-qty");
+
+        btnPlusList.forEach(function(btnPlus, index) {
+            btnPlus.addEventListener("click", function() {
+                let qty = parseInt(txtQtyList[index].value, 10);
+                qty = isNaN(qty) ? 0 : qty;
+                if (qty < 10) {
+                    qty++;
+                    txtQtyList[index].value = qty;
+                }
+            });
+        });
+
+        btnMinusList.forEach(function(btnMinus, index) {
+            btnMinus.addEventListener("click", function() {
+                let qty = parseInt(txtQtyList[index].value, 10);
+                qty = isNaN(qty) ? 0 : qty;
+                if (qty > 1) {
+                    qty--;
+                    txtQtyList[index].value = qty;
+                }
+            });
+        });
+    });
+</script> -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const rows = document.querySelectorAll(".table tbody tr");
+    const tkn = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+    let subtotal = 0;
+    let cartItemIds = []; // Array to store cart item IDs
+    let finaltotal = 0; // Declare finaltotal variable outside of the function scope
+    let shipping = parseFloat(document.querySelector("#shipping").textContent); // Get the shipping amount
+  
+    rows.forEach(row => {
+      const btnPlus = row.querySelector(".btn-plus");
+      const btnMinus = row.querySelector(".btn-minus");
+      const txtQty = row.querySelector(".txt-qty");
+      const removeBtn = row.querySelector(".btn-danger");
+      const pid = row.querySelector(".product-id").value;
+  
+      btnPlus.addEventListener("click", function() {
+        let qty = parseInt(txtQty.value, 10);
+        qty = isNaN(qty) ? 0 : qty;
+        if (qty < 10) {
+          qty++;
+          txtQty.value = qty;
+          updateTotal(row, qty, pid); // Pass the current row, quantity, and pid to the updateTotal function
+        }
+      });
+  
+      btnMinus.addEventListener("click", function() {
+        let qty = parseInt(txtQty.value, 10);
+        qty = isNaN(qty) ? 0 : qty;
+        if (qty > 1) {
+          qty--;
+          txtQty.value = qty;
+          updateTotal(row, qty, pid); // Pass the current row, quantity, and pid to the updateTotal function
+        }
+      });
+  
+      // Function to update total amount for the row
+      function updateTotal(row, quantity, pid) {
+        let price = parseFloat(row.querySelector('.price').textContent.replace('₹', '')); // Remove the rupees symbol before parsing
+        let totalAmount = quantity * price;
+        row.querySelector('.total').textContent = '₹' + totalAmount.toFixed(2); // Add the rupees symbol back
+  
+        // Call the updateSubtotal function and update the subtotal in the cart summary block
+        updateSubtotal();
+      }
+  
+      // Function to calculate the subtotal for all the food items in the cart
+      function updateSubtotal() {
+        subtotal = 0;
+        cartItemIds = []; // Clear the array before updating
+        rows.forEach(row => {
+          let quantity = parseInt(row.querySelector('.txt-qty').value, 10);
+          let price = parseFloat(row.querySelector('.price').textContent.replace('₹', '')); // Remove the rupees symbol before parsing
+          let totalAmount = quantity * price;
+          subtotal += totalAmount;
+          cartItemIds.push({ id: row.querySelector(".product-id").value, quantity: quantity }); // Push the item ID and quantity into the array as an object
+        });
+        subtotal = subtotal.toFixed(2);
+        let subtotalElement = document.querySelector(".subtotal");
+        subtotalElement.textContent = '₹' + subtotal; // Add the rupees symbol back
+  
+        // Calculate the final total by adding the subtotal and shipping amount
+        if (isNaN(shipping)) {
+          shipping = 20; // Set the shipping amount to 0 if it is not a valid number
+        }
+        finaltotal = parseFloat(subtotal) + shipping; // Assign finaltotal value
+        finaltotal = finaltotal.toFixed(2);
+        let finaltotalElement = document.querySelector("#finaltotal");
+        finaltotalElement.textContent = '₹' + finaltotal; // Add the rupees symbol back
+      }
+  
+      // Call the updateSubtotal function after the rows have been initialized
+      updateSubtotal();
+    });
+  
+    // Send checkout 1
+    const checkoutBtn1 = document.querySelector("#checkout-btn");
+    checkoutBtn1.addEventListener("click", function() {
+      let postObj = {
+        'cartItems': cartItemIds, // Include the array of cart items (including their IDs and quantities)
+        'subtotal': subtotal,
+        'shipping': shipping, // Include the shipping amount in the data object
+        'finaltotal': finaltotal // Include finaltotal in the data object
+      };
+  
+      // Send AJAX request with cart item IDs to the checkout URL
+      fetch("{% url 'Food:updatecart' %}", {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRFToken': tkn
+            },
+        body: JSON.stringify(postObj)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Process the response data if needed
+        console.log(data);
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+    });
+  
+    // Send checkout 2
+    const checkoutBtn2 = document.querySelector("#checkout-btn");
+    checkoutBtn2.addEventListener("click", function() {
+      let postObj = {
+        'cartItems': cartItemIds, // Include the array of cart items (including their IDs and quantities)
+        'subtotal': subtotal,
+        'shipping': shipping, // Include the shipping amount in the data object
+        'finaltotal': finaltotal // Include finaltotal in the data object
+      };
+  
+      // Send AJAX request with cart item IDs to the checkout URL
+      fetch("{% url 'Food:checkout' %}", {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRFToken': tkn
+            },
+        body: JSON.stringify(postObj)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Process the response data if needed
+        console.log(data);
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
+    });
+  });
+  </script>
+  
+  
+
+
+<!-- For remove from cart working condition
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const tkn = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+    const row = document.querySelectorAll(".table tbody tr");
+    row.forEach(r => {
+      const removeBtn = r.querySelector(".btn-danger");
+      const pid = r.querySelector(".product-id").value;
+
+      removeBtn.addEventListener("click", function (){
+      console.log(pid);
+      let postObj = {
+            'pid': pid
+          }
+          // Send AJAX request with pid to the addtocart view
+          fetch(""), {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRFToken': tkn
+            },
+            body: JSON.stringify(postObj)
+          })
+          .then(response => response.json())
+          .then(data => {
+            // Process the response data if needed
+            console.log(data);
+          })
+          .catch(error => {
+            console.error("Error:", error);
+          });
+      });
+    });
+  }
+  );
+</script>
+-->
+</body>
+
+
+{% endblock %}
+
+</html>

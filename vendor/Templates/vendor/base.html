@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <!-- Basic -->
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <!-- Site Metas -->
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
+    <link rel="shortcut icon" href="{% static 'Food/images/favicon.png' %}" type="">
+
+    <title> Tasty Bites Admin</title>
+
+    <!-- bootstrap core css -->
+
+    <link rel="stylesheet" type="text/css" href="{% static 'Food/css/bootstrap.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'Food/css/cartbtns.css' %}" />
+
+    <!--owl slider stylesheet -->
+    <link rel="stylesheet" type="text/css"
+        href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+    <!-- nice select  -->
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/css/nice-select.min.css"
+        integrity="sha512-CruCP+TD3yXzlvvijET8wV5WxxEh5H8P4cmz0RFbKK6FlZ2sYl3AEsKlLPHbniXKSrDdFewhbmBK5skbdsASbQ=="
+        crossorigin="anonymous" />
+    <!-- font awesome style -->
+
+    <link href="{% static 'Food/css/font-awesome.min.css' %}" rel="stylesheet" />
+
+    <!-- Custom styles for this template -->
+    <link href="{% static 'Food/css/style.css' %}" rel="stylesheet" />
+
+    <!-- responsive style -->
+    <link href="{% static 'Food/css/responsive.css' %}" rel="stylesheet" />
+
+    <!-- From cart head -->
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
+    <!-- Libraries Stylesheet // if enable its doesn't show buttons in reviews slide -->
+    <!-- <link href="{% static 'Food/cart/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet"> -->
+
+
+    {% block adminhead %}
+    {% endblock %}
+
+</head>
+
+<body>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        <!-- {{message}} -->
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% block body%}
+    {% endblock %}
+
+    {% block content %}
+    {% endblock %}
+
+</body>
+
+</html>

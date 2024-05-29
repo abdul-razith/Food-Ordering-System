@@ -1,0 +1,327 @@
+{% extends 'Food/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% block cartheads %}
+  <meta charset="utf-8">
+  <title>EShopper - Bootstrap Shop Template</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Free HTML Templates" name="keywords">
+  <meta content="Free HTML Templates" name="description">
+
+  <!-- Favicon -->
+  <link href="{% static 'Food/images/favicon.png'%}" rel="icon">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link href="{% static 'Food/cart/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="{% static 'Food/cart/css/style.css'%}" rel="stylesheet">
+  {% endblock %}
+</head>
+{% block body %}
+
+<body class="sub_page">
+
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="{% static 'Food/images/hero-bg.jpg' %}" alt="">
+    </div>
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{% url 'Food:index' %}">
+            <span>
+              Tasty Bites
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  mx-auto ">
+              <li class="nav-item active">
+                <a class="nav-link" href="{% url 'Food:index' %}">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:menu' %}">Menu</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:about' %}">About</a>
+              </li>
+            </ul>
+            <div class="user_option">
+              <!-- user login and logout icons -->
+              {% if user.is_authenticated %}
+              <a href="{% url 'logout' %}" class="user_link">
+                <i class="fa  fa-sign-out" aria-hidden="true"></i>
+                <h6>Logout</h6>
+              </a>
+              <a href="{% url 'profile' %}" class="user_link">
+                <i class="fa  fa-user" aria-hidden="true"></i>
+                <h6>Profile</h6>
+              </a>
+              {% else %}
+              <a href="{% url 'login' %}" class="user_link">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <h6>Login</h6>
+              </a>
+              <a href="{% url 'register' %}" class="user_link">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <h6>Register</h6>
+              </a>
+              {% endif %}
+
+              <a class="cart_link" href="{% url 'Food:tempcart' %}">
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029"
+                  style="enable-background:new 0 0 456.029 456.029; width:25px;" xml:space="preserve">
+                  <g>
+                    <g>
+                      <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
+                   c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
+                    </g>
+                  </g>
+                  <g>
+                    <g>
+                      <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                   C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
+                   c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
+                   C457.728,97.71,450.56,86.958,439.296,84.91z" />
+                    </g>
+                  </g>
+                  <g>
+                    <g>
+                      <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
+                   c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
+                    </g>
+                  </g>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <!-- Checkout Start -->
+  <div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+      <div class="col-lg-8">
+        <div class="mb-4">
+          <h4 class="font-weight-semi-bold mb-4">Billing Address</h4>
+          <form action="{% url 'updateprofile' %}?from=endpage" method="POST" id="billingForm">
+            {% csrf_token %}
+            <div class="row">
+              <div class="col-md-6 form-group">
+                <label>First Name</label>
+                <input class="form-control" name="firstname" type="text" placeholder="John" value="{{user.first_name}}"
+                  required>
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Last Name</label>
+                <input class="form-control" name="lastname" type="text" placeholder="Doe" value="{{user.last_name}}"
+                  required>
+              </div>
+              <div class="col-md-6 form-group">
+                <label>E-mail</label>
+                <input class="form-control" type="text" placeholder="example@email.com" value="{{user.email}}">
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Address</label>
+                <input class="form-control" name="address" type="text" placeholder="Door No. / Street / Area"
+                  value="{{user.profile.address}}" required>
+              </div>
+              <div class="col-md-6 form-group">
+                <label>Mobile No</label>
+                <input class="form-control" name="mobileno1" type="text" maxlength="10" placeholder="+123 456 789"
+                  value="{{user.profile.mobile_no1}}" required>
+              </div>
+              {% if user.profile.city %}
+              <div class="col-md-6 form-group">
+                <label>City</label>
+                <input class="form-control" name="city" placeholder="Tirunelveli" type="text"
+                  value="{{user.profile.city}}" required>
+              </div>
+              {% else %}
+              <div class="col-md-6 form-group">
+                <label>City</label>
+                <input class="form-control" name="city" placeholder="Tirunelveli" type="text" required>
+              </div>
+              {% endif %}
+              {% if user.profile.state %}
+              <div class="col-md-6 form-group">
+                <label>State</label>
+                <input class="form-control" name="state" placeholder="Tamil Nadu" type="text"
+                  value="{{user.profile.state}}" required>
+              </div>
+              {% else %}
+              <div class="col-md-6 form-group">
+                <label>State</label>
+                <input class="form-control" name="state" placeholder="Tamil Nadu" type="text" required>
+              </div>
+              {% endif %}
+              <div class="col-md-6 form-group">
+                <label> PIN Code</label>
+                <input class="form-control" name="pincode" type="text" maxlength="6" placeholder="627351"
+                  value="{{user.profile.pin_code}}" required>
+              </div>
+              {% if user.profile.land_mark %}
+              <div class="col-md-6 form-group">
+                <label> Land Mark</label>
+                <input class="form-control" name="landmark" type="text" placeholder="Nearest Building or a landmark"
+                  value="{{user.profile.land_mark}}" required>
+              </div>
+              {% else %}
+              <div class="col-md-6 form-group">
+                <label> Land Mark</label>
+                <input class="form-control" name="landmark" type="text" placeholder="Nearest Building or a landmark"
+                  required>
+              </div>
+              {% endif %}
+              {% if user.profile.user_review %}
+              <div class="col-md-6 form-group">
+                <label> Review</label>
+                <input class="form-control" name="review" type="text" placeholder="Your own thoughts"
+                  value="{{user.profile.user_review}}" required>
+              </div>
+              {% else %}
+              <div class="col-md-6 form-group">
+                <label> Review</label>
+                <input class="form-control" name="review" type="text" placeholder="Your own thoughts" required>
+              </div>
+              {% endif %}
+              <div class="col-md-6 form-group">
+                <!--For form adjustment -->
+              </div>
+              <div class="col-md-12 form-group" style="text-align: right;">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="reset" class="btn btn-danger">Clear</button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-4">
+      <div class="card border-secondary mb-5">
+        <div class="card-header  border-0">
+          <h4 class="font-weight-semi-bold m-0 text-center">Order Total</h4>
+        </div>
+        <div class="card-body">
+          <h5 class="font-weight-medium mb-3">Products</h5>
+          {% for x in data %}
+          <div class="d-flex justify-content-between">
+            <p>{{x.food_name}}</p>
+            <p>₹{{x.food_discount_price}} x {{x.food_quantity}} = ₹{{x.total}}</p>
+          </div>
+          {% endfor %}
+          <hr class="mt-0">
+          <div class="d-flex justify-content-between mb-3 pt-1">
+            <h6 class="font-weight-medium">Subtotal</h6>
+            <h6 class="font-weight-medium">₹{{sub_total}}</h6>
+          </div>
+          <div class="d-flex justify-content-between">
+            <h6 class="font-weight-medium">Shipping</h6>
+            <h6 class="font-weight-medium">₹{{shipping_price}}</h6>
+          </div>
+        </div>
+        <div class="card-footer border-secondary bg-transparent">
+          <div class="d-flex justify-content-between mt-2">
+            <h5 class="font-weight-bold">Total</h5>
+            <h5 class="font-weight-bold">₹{{final_total}}</h5>
+          </div>
+        </div>
+      </div>
+
+      <div class="card border-secondary mb-5">
+        <div class="card-header  border-0">
+          <h4 class="font-weight-semi-bold m-0">Payment</h4>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <div class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" name="payment" id="directcheck">
+              <label class="custom-control-label" for="directcheck">Direct Check</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" name="payment" id="paypal" disabled>
+              <label class="custom-control-label" for="paypal">Paypal (Coming Soon)</label>
+            </div>
+          </div>
+          <div class="">
+            <div class="custom-control custom-radio">
+              <input type="radio" class="custom-control-input" name="payment" id="banktransfer" disabled>
+              <label class="custom-control-label" for="banktransfer">Bank Transfer (Coming Soon)</label>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer border-secondary bg-transparent">
+
+          <a href="{% url 'Food:placeorder' order_id %}"><button id="placeOrderButton"
+              class="btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3">Place Order</button></a>
+          <a href="{% url 'Food:cancelorder' order_id %}"><button id="cancelOrderButton"
+              class="btn btn-lg btn-block btn-danger font-weight-bold my-3 py-3">Cancel Order</button></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  <!-- Checkout End -->
+
+
+
+
+  <!-- Back to Top -->
+  <!-- <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a> -->
+
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'Food/cart/lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'Food/cart/lib/owlcarousel/owl.carousel.min.js'%}"></script>
+
+  <!-- Contact Javascript File -->
+  <script src="{% static 'Food/cart/mail/jqBootstrapValidation.min.js'%}"></script>
+  <script src="{% static 'Food/cart/mail/contact.js'%}"></script>
+
+  <!-- Template Javascript -->
+  <!-- <script src="js/main.js"></script> -->
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      document.getElementById("placeOrderButton").addEventListener("click", function (event) {
+        var form = document.getElementById("billingForm");
+        if (!form.checkValidity()) {
+          event.preventDefault(); // Prevent the default action (moving to the next page)
+          event.stopPropagation(); // Stop event propagation
+          // Show an error message or handle validation feedback
+          alert("Please fill in all required fields.");
+        }
+        form.classList.add("was-validated"); // Add Bootstrap's "was-validated" class for visual feedback
+      });
+    });
+  </script>
+</body>
+{% endblock %}
+
+</html>

@@ -1,0 +1,501 @@
+{% extends 'vendor/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% block cartheads %}
+  <meta charset="utf-8">
+  <title>EShopper - Bootstrap Shop Template</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Free HTML Templates" name="keywords">
+  <meta content="Free HTML Templates" name="description">
+
+  <!-- Favicon -->
+  <link href="{% static 'Food/images/favicon.png'%}" rel="icon">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link href="{% static 'Food/cart/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="{% static 'Food/cart/css/style.css'%}" rel="stylesheet">
+
+  <style>
+    .stamp-container {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px; /* Adjust margin as needed */
+}
+
+.stamp-img {
+  width: 50px; /* Adjust width as needed */
+  height: auto; /* Maintain aspect ratio */
+}
+  </style>
+  {% endblock %}
+</head>
+
+{% block body %}
+
+<body class="sub_page">
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="{% static 'Food/images/hero-bg.jpg' %}" alt="">
+    </div>
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{% url 'Food:index'%}">
+            <span>
+              Tasty Bites
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  mx-auto ">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:index' %}">Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:menu' %}">Menu <span class="sr-only">(current)</span> </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:about' %}">About</a>
+              </li>
+            </ul>
+            <div class="user_option">
+              <!-- user login and logout icons -->
+              {% if user.is_authenticated %}
+              <a href="{% url 'logout' %}" class="user_link">
+                <i class="fa  fa-sign-out" aria-hidden="true"></i>
+                <h6>Logout</h6>
+              </a>
+              <a href="{% url 'profile' %}" class="user_link">
+                <i class="fa  fa-user" aria-hidden="true"></i>
+                <h6>Profile</h6>
+              </a>
+              {% else %}
+              <a href="{% url 'login' %}" class="user_link">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <h6>Login</h6>
+              </a>
+              <a href="{% url 'register' %}" class="user_link">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <h6>Register</h6>
+              </a>
+              {% endif %}
+
+              <a class="cart_link" href="{% url 'Food:tempcart' %}">
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029"
+                  style="enable-background:new 0 0 456.029 456.029; width:25px;" xml:space="preserve">
+                  <g>
+                    <g>
+                      <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
+                   c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
+                    </g>
+                  </g>
+                  <g>
+                    <g>
+                      <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                   C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
+                   c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
+                   C457.728,97.71,450.56,86.958,439.296,84.91z" />
+                    </g>
+                  </g>
+                  <g>
+                    <g>
+                      <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
+                   c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
+                    </g>
+                  </g>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+  <!-- Cart Start -->
+  <!-- Cart Start -->
+<div class="container-fluid pt-5">
+  <div class="row px-xl-5">
+    <div class="col-lg-8 table-responsive mb-5">
+      <table class="table table-bordered text-center mb-0">
+        <thead class="text-dark">
+          <tr>
+            <th>Image</th>
+            <th>Product</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody class="align-middle tbodys">
+          {% for item in items_list %}
+          <tr>
+            <input type="hidden" class="product-id" value="{{ item.id }}">
+            <td class="align-middle">
+              <img src="{{ item.img.url }}" alt="{{ item.name }}" style="width: 50px;">
+            </td>
+            <td class="align-middle">{{ item.name }}</td>
+            <td class="align-middle price">₹{{ item.price }}</td>
+            <td class="align-middle">{{ item.quantity }}</td>
+            <td class="align-middle price">₹{{ item.total }}</td>
+          </tr>
+          {% endfor %}
+
+          {% if status == 2%}
+          <tr>
+            <td colspan="2" rowspan="3" class="stamp-cell">
+              <div class="stamp-container">
+                <img src="{% static 'users/images/stamp.jpg' %}" alt="Stamp Image" class="stamp-img" width="120px" height="120px">
+              </div>
+            </td>
+            <td colspan="2" class="text-right"><b>Subtotal:</b></td>
+            <td colspan="3" class="align-middle total"><b>₹{{ sub_total }}</b></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="text-right"><b>Shipping:</b></td>
+            <td colspan="3" class="align-middle total"><b>₹{{ shipping_price }}</b></td>
+          </tr>
+          <tr>
+            <td colspan="2" class="text-right"><b>Final Price:</b></td>
+            <td colspan="3" class="align-middle total"><b>₹{{ final_price }}</b></td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="4" class="text-right"><b>Subtotal:</b></td>
+            <td colspan="3" class="align-middle total"><b>₹{{ sub_total }}</b></td>
+          </tr>
+          <tr>
+            <td colspan="4" class="text-right"><b>Shipping:</b></td>
+            <td colspan="3" class="align-middle total"><b>₹{{ shipping_price }}</b></td>
+          </tr>
+          <tr>
+            <td colspan="4" class="text-right"><b>Final Price:</b></td>
+            <td colspan="3" class="align-middle total"><b>₹{{ final_price }}</b></td>
+          </tr>
+          {% endif %}
+
+          
+        </tbody>
+      </table>
+      <div>
+        {% if status == 2 %}
+        <br>
+        <button id="print-btn" class="btn btn-info float-right">Print</button>
+        {% endif %}
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+  <!-- footer section -->
+  <footer class="footer_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 footer-col">
+          <div class="footer_contact">
+            <h4>
+              Contact Us
+            </h4>
+            <div class="contact_link_box">
+              <a href="">
+                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                <span>
+                  Location
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-phone" aria-hidden="true"></i>
+                <span>
+                  Call +01 1234567890
+                </span>
+              </a>
+              <a href="">
+                <i class="fa fa-envelope" aria-hidden="true"></i>
+                <span>
+                  demo@gmail.com
+                </span>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <div class="footer_detail">
+            <a href="" class="footer-logo">
+              Tasty Bites
+            </a>
+            <p>
+              Necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin
+              words, combined with
+            </p>
+            <div class="footer_social">
+              <a href="">
+                <i class="fa fa-facebook" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-twitter" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-linkedin" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-instagram" aria-hidden="true"></i>
+              </a>
+              <a href="">
+                <i class="fa fa-pinterest" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 footer-col">
+          <h4>
+            Opening Hours
+          </h4>
+          <p>
+            Everyday
+          </p>
+          <p>
+            10.00 Am -10.00 Pm
+          </p>
+        </div>
+      </div>
+      <div class="footer-info">
+        <p>
+          © Tasty Bites 2024. All rights reserved.<br> Designed with love by Tasty Bites.
+        </p>
+      </div>
+    </div>
+  </footer>
+  <!-- footer section -->
+
+  <!-- jQery -->
+  <script src="{% static 'Food/js/jquery-3.4.1.min.js' %}"></script>
+  <!-- popper js -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+    </script>
+  <!-- bootstrap js -->
+  <script src="{% static 'Food/js/bootstrap.js' %}"></script>
+  <!-- owl slider -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+  </script>
+  <!-- isotope js -->
+  <script src="https://unpkg.com/isotope-layout@3.0.4/dist/isotope.pkgd.min.js"></script>
+  <!-- nice select -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-nice-select/1.1.0/js/jquery.nice-select.min.js"></script>
+  <!-- custom js -->
+  <script src="{% static 'Food/js/custom.js' %}"></script>
+  <!-- Google Map -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
+  </script>
+  <!-- End Google Map -->
+
+  <!-- for cart -->
+  <!-- Back to Top 
+      <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a>
+      -->
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'Food/cart/lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'Food/cart/lib/owlcarousel/owl.carousel.min.js'%}"></script>
+
+  <!-- Contact Javascript File -->
+  <script src="{% static 'Food/cart/mail/jqBootstrapValidation.min.js'%}"></script>
+  <script src="{% static 'Food/cart/mail/contact.js'%}"></script>
+
+  <!-- Template Javascript -->
+  <!-- <script src="{% static 'Food/cart/js/main.js'%}"></script> -->
+  <script>
+    // Add the click event listener for the print button
+    document.getElementById('print-btn').addEventListener('click', () => {
+      // Create a new window to print the content
+      let printWin = window.open('', 'Print', 'width=800,height=700');
+  
+      // Set the HTML content for the new window
+      printWin.document.open();
+      printWin.document.write(`
+        <!DOCTYPE html>
+        <html lang="en">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Restaurant Bill Invoice Receipt</title>
+          <style>
+            /* Custom Header Styles */
+            .header {
+              background-color: #007bff;
+              color: black;
+              padding: 20px;
+              text-align: center;
+            }
+
+            /* Custom Footer Styles */
+            .footer {
+              background-color: #f8f9fa;
+              color: #333;
+              padding: 10px;
+              text-align: center;
+              position: fixed;
+              bottom: 0;
+              width: 100%;
+            }
+
+            /* Main Content Styles */
+            .container {
+              max-width: 800px;
+              margin: 20px auto;
+              border: 1px solid #ccc;
+              border-radius: 10px;
+              overflow: hidden;
+            }
+
+            .table-container {
+              padding: 20px;
+              border-bottom: 1px solid #ccc;
+            }
+
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin-bottom: 20px;
+            }
+
+            .card-body {
+      padding: 20px;
+    }
+
+    .card-body p {
+      margin-bottom: 0px; /* Adjusted margin */
+    }
+
+            th, td {
+              padding: 10px;
+              border: 1px solid #ddd;
+            }
+
+            .stamp-container{
+              display: flex;
+      justify-content: center;
+            }
+
+            .msg{
+              text-align: center;
+            }
+
+            
+          </style>
+        </head>
+        <body>
+          <!-- Custom Header -->
+          <div class="header">
+            <h1>Tasty Bites</h1>
+            <p>Address: 123 Main Street, Tirunelveli, Tamil Nadu</p>
+            <p>Phone: +123456789 | Email: info@example.com</p>
+          </div>
+
+          <div class="container">
+            <div class="card">
+            <div class="card-body">
+              <p>Order ID: {{ order_id }}</p>
+              <p>Name: {{ data.name }}</p>
+              <p>Mobile No: {{ data.mobileno }}</p>
+              <p>Address: {{ data.address }}</p>
+              <p>Order Date: {{ order_at }}</p>
+            </div>
+            </div>
+          </div>
+
+          <!-- Main Content -->
+          <div>
+            <h2>Thank you for your order</h2>
+            </div>
+              <!-- Invoice Table -->
+              <table>
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody class="align-middle tbodys">
+          {% for item in items_list %}
+          <tr>
+            <input type="hidden" class="product-id" value="{{ item.id }}">
+
+            <td class="align-middle">{{ item.name }}</td>
+            <td class="align-middle price">₹{{ item.price }}</td>
+            <td class="align-middle">{{ item.quantity }}</td>
+            <td class="align-middle price">₹{{ item.total }}</td>
+          </tr>
+          {% endfor %}
+          <tr>
+            <td colspan="2" rowspan="3" class="stamp-cell">
+              <div class="stamp-container">
+                <img src="{% static 'users/images/stamp.jpg' %}" alt="Stamp Image" width="120px" height="120px">
+              </div>
+            </td>
+            <td colspan="1" class="text-right"><b>Subtotal:</b></td>
+            <td colspan="3" class="align-middle total"><b>₹{{ sub_total }}</b></td>
+          </tr>
+          <tr>
+            <td colspan="1" class="text-right"><b>Shipping:</b></td>
+            <td colspan="3" class="align-middle total"><b>₹{{ shipping_price }}</b></td>
+          </tr>
+          <tr>
+            <td colspan="1" class="text-right"><b>Final Price:</b></td>
+            <td colspan="3" class="align-middle total"><b>₹{{ final_price }}</b></td>
+          </tr>
+        </tbody>
+              </table>
+
+              <p class="msg">Thank you for dining with us! We look forward to serving you again.</p>
+
+          <!-- Custom Footer -->
+          <div class="footer">
+            <p>
+							© Tasty Bites 2024. All rights reserved.<br> Designed with love by Tasty Bites.
+						</p>
+          </div>
+        </body>
+        </html>
+      `);
+      printWin.document.close();
+      printWin.focus();
+      printWin.print();
+      printWin.close();
+    });
+  </script>
+
+
+  
+  
+</body>
+
+
+{% endblock %}
+
+</html>

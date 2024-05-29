@@ -1,0 +1,288 @@
+{% extends 'Food/base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+  {% block cartheads %}
+  <meta charset="utf-8">
+  <title>EShopper - Bootstrap Shop Template</title>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <meta content="Free HTML Templates" name="keywords">
+  <meta content="Free HTML Templates" name="description">
+
+  <!-- Favicon -->
+  <link href="{% static 'Food/images/favicon.png'%}" rel="icon">
+
+  <!-- Google Web Fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+  <!-- Libraries Stylesheet -->
+  <link href="{% static 'Food/cart/lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
+
+  <!-- Customized Bootstrap Stylesheet -->
+  <link href="{% static 'Food/cart/css/style.css'%}" rel="stylesheet">
+  {% endblock %}
+</head>
+{% block body %}
+
+<body class="sub_page">
+  <div class="hero_area">
+    <div class="bg-box">
+      <img src="{% static 'Food/images/hero-bg.jpg' %}" alt="">
+    </div>
+    <!-- header section strats -->
+    <header class="header_section">
+      <div class="container">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="{% url 'Food:index'%}">
+            <span>
+              Tasty Bites
+            </span>
+          </a>
+
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class=""> </span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  mx-auto ">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:index' %}">Home </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:menu' %}">Menu <span class="sr-only">(current)</span> </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'Food:about' %}">About</a>
+              </li>
+            </ul>
+            <div class="user_option">
+              <!-- user login and logout icons -->
+              {% if user.is_authenticated %}
+              <a href="{% url 'logout' %}" class="user_link">
+                <i class="fa  fa-sign-out" aria-hidden="true"></i>
+                <h6>Logout</h6>
+              </a>
+              <a href="{% url 'profile' %}" class="user_link">
+                <i class="fa  fa-user" aria-hidden="true"></i>
+                <h6>Profile</h6>
+              </a>
+              {% else %}
+              <a href="{% url 'login' %}" class="user_link">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <h6>Login</h6>
+              </a>
+              <a href="{% url 'register' %}" class="user_link">
+                <i class="fa fa-sign-in" aria-hidden="true"></i>
+                <h6>Register</h6>
+              </a>
+              {% endif %}
+
+              <a class="cart_link" href="{% url 'Food:tempcart' %}">
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029"
+                  style="enable-background:new 0 0 456.029 456.029; width:25px;" xml:space="preserve">
+                  <g>
+                    <g>
+                      <path d="M345.6,338.862c-29.184,0-53.248,23.552-53.248,53.248c0,29.184,23.552,53.248,53.248,53.248
+                   c29.184,0,53.248-23.552,53.248-53.248C398.336,362.926,374.784,338.862,345.6,338.862z" />
+                    </g>
+                  </g>
+                  <g>
+                    <g>
+                      <path d="M439.296,84.91c-1.024,0-2.56-0.512-4.096-0.512H112.64l-5.12-34.304C104.448,27.566,84.992,10.67,61.952,10.67H20.48
+                   C9.216,10.67,0,19.886,0,31.15c0,11.264,9.216,20.48,20.48,20.48h41.472c2.56,0,4.608,2.048,5.12,4.608l31.744,216.064
+                   c4.096,27.136,27.648,47.616,55.296,47.616h212.992c26.624,0,49.664-18.944,55.296-45.056l33.28-166.4
+                   C457.728,97.71,450.56,86.958,439.296,84.91z" />
+                    </g>
+                  </g>
+                  <g>
+                    <g>
+                      <path d="M215.04,389.55c-1.024-28.16-24.576-50.688-52.736-50.688c-29.696,1.536-52.224,26.112-51.2,55.296
+                   c1.024,28.16,24.064,50.688,52.224,50.688h1.024C193.536,443.31,216.576,418.734,215.04,389.55z" />
+                    </g>
+                  </g>
+                </svg>
+              </a>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </header>
+    <!-- end header section -->
+  </div>
+
+  <!-- Checkout Start -->
+  <div class="container-fluid pt-5">
+    <div class="row px-xl-5">
+      <div class="col-lg-12">
+        <div class="mb-4">
+          <h4 class="font-weight-semi-bold mb-4">Address</h4>
+          <form action="{% url 'updateprofile' %}?from=profile" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- Form fields -->
+            <img src="{{user.profile.image.url}}" class="rounded-circle mx-auto d-block" alt=""
+              style="width: 200px; height: 200px;">
+            <div class="row">
+              <div class="col-md-4 form-group">
+                <label>First Name</label>
+                <input class="form-control" name="firstname" type="text" placeholder="John" value="{{user.first_name}}">
+              </div>
+              <div class="col-md-4 form-group">
+                <label>Last Name</label>
+                <input class="form-control" name="lastname" type="text" placeholder="Doe" value="{{user.last_name}}">
+              </div>
+              <div class="col-md-4 form-group">
+                <label>E-mail</label>
+                <input class="form-control" type="text" placeholder="example@email.com" value="{{user.email}}">
+              </div>
+              <div class="col-md-4 form-group">
+                <label>Address</label>
+                <input class="form-control" name="address" type="text" placeholder="Door No. / Street / Area"
+                  value="{{user.profile.address}}">
+              </div>
+              <div class="col-md-4 form-group">
+                <label>Mobile No</label>
+                <input class="form-control" name="mobileno1" type="text" maxlength="10" placeholder="+123 456 789"
+                  value="{{user.profile.mobile_no1}}">
+              </div>
+              <!--
+                        <div class="col-md-4 form-group">
+                            <label>Mobile No 2</label>
+                            <input class="form-control" name="mobileno2" type="text" maxlength="10" placeholder="+123 456 789" value="{{user.profile.mobile_no2}}">
+                        </div>
+                      -->
+              {% if user.profile.city %}
+              <div class="col-md-4 form-group">
+                <label>City</label>
+                <input class="form-control" name="city" type="text" placeholder="Tirunelveli"
+                  value="{{user.profile.city}}">
+              </div>
+              {% else %}
+              <div class="col-md-4 form-group">
+                <label>City</label>
+                <input class="form-control" name="city" type="text" placeholder="Tirunelveli">
+              </div>
+              {% endif %}
+              {% if user.profile.state %}
+              <div class="col-md-4 form-group">
+                <label>State</label>
+                <input class="form-control" name="state" type="text" placeholder="Tamil Nadu"
+                  value="{{user.profile.state}}">
+              </div>
+              {% else %}
+              <div class="col-md-4 form-group">
+                <label>State</label>
+                <input class="form-control" name="state" type="text" placeholder="Tamil Nadu">
+              </div>
+              {% endif %}
+              <div class="col-md-4 form-group">
+                <label> PIN Code</label>
+                <input class="form-control" name="pincode" type="text" maxlength="6" placeholder="627351"
+                  value="{{user.profile.pin_code}}">
+              </div>
+              {% if user.profile.land_mark %}
+              <div class="col-md-4 form-group">
+                <label>Land Mark</label>
+                <input class="form-control" name="landmark" type="text" placeholder="Nearest Building or a landmark"
+                  value="{{user.profile.land_mark}}">
+              </div>
+              {% else %}
+              <div class="col-md-4 form-group">
+                <label>Land Mark</label>
+                <input class="form-control" name="landmark" type="text" placeholder="Nearest Building or a landmark">
+              </div>
+              {% endif %}
+              <div class="col-md-4 form-group">
+                <!--For form adjustment -->
+              </div>
+              <div class="col-md-4 form-group">
+                <label> Profile Pic</label>
+                <input type="file" name="profilepic" accept="image/*">
+              </div>
+              <div class="col-md-4 form-group">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="reset" class="btn btn-danger">Clear</button>
+              </div>
+          </form>
+          <!-- Submit buttons -->
+        </div>
+      </div>
+
+      <!-- Recent Orders Table -->
+      {% if data %}
+      <div class="col-lg-12">
+        <h4 style="text-align: center;">Recent Orders</h4>
+        <br>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">S.No</th>
+              <th scope="col">Date</th>
+              <th scope="col">Food Charges</th>
+              <th scope="col">Shipping Charges</th>
+              <th scope="col">Total Price</th>
+              <th scope="col">Status</th>
+              <th scope="col">Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in data %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ item.order_at }}</td>
+              <td>₹{{ item.sub_total }}</td>
+              <td>₹{{ item.shipping_price }}</td>
+              <td>₹{{ item.final_price }}</td>
+              {% if item.delivered_status == 0 %}
+              <td><span class="order-status"
+                  style="background-color: red;width: 60px;height: 36px;padding: 2px 10px; border-radius: 2px;">In
+                  Progress</span></td>
+              {% elif item.delivered_status == 1 %}
+              <td><span class="order-status"
+                  style="background-color: skyblue;width: 60px;height: 36px;padding: 2px 10px; border-radius: 2px;">Out
+                  for Delivery</span></td>
+              {% else %}
+              <td><span class="order-status"
+                  style="background-color: green;width: 60px;height: 36px;padding: 2px 10px; border-radius: 2px;">Delivered</span>
+              </td>
+              {% endif %}
+              <td><a href="{% url 'single' item.user_id item.id %}"><i class="icon-plus2 text-color">View</i></a></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Back to Top -->
+  <!-- <a href="#" class="btn btn-primary back-to-top"><i class="fa fa-angle-double-up"></i></a> -->
+
+
+  <!-- JavaScript Libraries -->
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+  <script src="{% static 'Food/cart/lib/easing/easing.min.js' %}"></script>
+  <script src="{% static 'Food/cart/lib/owlcarousel/owl.carousel.min.js'%}"></script>
+
+  <!-- Contact Javascript File -->
+  <script src="{% static 'Food/cart/mail/jqBootstrapValidation.min.js'%}"></script>
+  <script src="{% static 'Food/cart/mail/contact.js'%}"></script>
+
+  <!-- Template Javascript -->
+  <!-- <script src="js/main.js"></script> -->
+</body>
+{% endblock %}
+
+</html>
